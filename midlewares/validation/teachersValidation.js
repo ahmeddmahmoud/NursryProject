@@ -10,8 +10,8 @@ exports.teachersInsertValidator = [
     .isStrongPassword()
     .withMessage("You should provide a strong password"),
   body("role")
-    .isIn(["child", "admin", "teacher"])
-    .withMessage("role should be within child,admin,teacher"),
+    .isIn(["admin", "teacher"])
+    .withMessage("role should be within admin,teacher"),
   body("email")
     .isEmail()
     .withMessage("You should provide a correct form email"),
@@ -19,6 +19,7 @@ exports.teachersInsertValidator = [
 ];
 
 exports.teachersUpdateValidator = [
+  body("_id").isMongoId().withMessage("Id should be Mongo ID"),
   body("fullName")
     .optional()
     .isAlpha()
@@ -31,8 +32,8 @@ exports.teachersUpdateValidator = [
     .withMessage("You should provide a strong password"),
   body("role")
     .optional()
-    .isIn(["child", "admin", "teacher"])
-    .withMessage("role should be within child,admin,teacher"),
+    .isIn(["admin", "teacher"])
+    .withMessage("role should be within admin,teacher"),
   body("email")
     .optional()
     .isEmail()
