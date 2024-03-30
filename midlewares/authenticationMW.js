@@ -22,3 +22,8 @@ module.exports.isTeacher = (req, res, next) => {
   if (req.token.role == "teacher") next();
   else next(new Error("not Authorizatied"));
 };
+
+module.exports.isTeacherOrAdmin = (req, res, next) => {
+  if (req.token.role == "teacher" || req.token.role == "admin") next();
+  else next(new Error("not Authorizatied"));
+};

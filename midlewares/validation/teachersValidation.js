@@ -47,3 +47,10 @@ exports.teachersUpdateValidator = [
 exports.teacherIdValidator = [
   param("id").isMongoId().withMessage("Teacher ID must be Mongo ID"),
 ];
+
+exports.teachersChangePasswordValidator = [
+  body("_id").isMongoId().withMessage("Id should be Mongo ID"),
+  body("password")
+    .isStrongPassword()
+    .withMessage("You should provide a strong password"),
+];

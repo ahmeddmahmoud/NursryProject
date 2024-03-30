@@ -72,3 +72,20 @@ exports.deleteTeacher = (req, res, next) => {
     })
     .catch((error) => next(error));
 };
+
+exports.changeTeacherPassword = (req, res, next) => {
+  teacherSchema
+    .updateOne(
+      { _id: req.body._id },
+      {
+        $set: {
+          password: req.body.password,
+        },
+      }
+    )
+    .then((data) => {
+      if (data.matchedCount == 0) next(new Error("Teacher Not Found"));
+      res.status(200).json("Your password was updated successfully!");
+    })
+    .catch((err) => next(err));
+};
