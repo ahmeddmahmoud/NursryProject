@@ -9,6 +9,7 @@ const teachersRoute = require("./routes/teachersRoute");
 const childrenRoute = require("./routes/childrenRoute");
 const classRoute = require("./routes/classesRoute");
 const authenticationMW = require("./midlewares/authenticationMW");
+const registerRoute = require("./routes/registerRoute");
 const port = process.env.PORT || 8080;
 
 mongoose
@@ -26,6 +27,7 @@ mongoose
 //midlleware
 server.use(morgan(":method :url"));
 server.use(express.json());
+server.use(registerRoute);
 server.use(loginRoute);
 server.use(authenticationMW);
 server.use(teachersRoute);
