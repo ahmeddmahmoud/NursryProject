@@ -9,9 +9,6 @@ exports.teachersInsertValidator = [
   body("password")
     .isStrongPassword()
     .withMessage("You should provide a strong password"),
-  body("role")
-    .isIn(["admin", "teacher"])
-    .withMessage("role should be within admin,teacher"),
   body("email")
     .isEmail()
     .withMessage("You should provide a correct form email"),
@@ -30,10 +27,6 @@ exports.teachersUpdateValidator = [
     .optional()
     .isStrongPassword()
     .withMessage("You should provide a strong password"),
-  body("role")
-    .optional()
-    .isIn(["admin", "teacher"])
-    .withMessage("role should be within admin,teacher"),
   body("email")
     .optional()
     .isEmail()
