@@ -23,7 +23,7 @@ exports.checkTeacher = (req, res, next) => {
                 _id: object._id,
                 role: "admin",
               },
-              "Ahmed Elshahat",
+              process.env.SECRETKEY,
               { expiresIn: "1hr" }
             );
             res.json({ data: "Authenticated", token });

@@ -2,6 +2,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const server = express();
+const dotenv = require("dotenv").config();
 
 const { default: mongoose } = require("mongoose");
 const loginRoute = require("./routes/authentication");
@@ -10,10 +11,10 @@ const childrenRoute = require("./routes/childrenRoute");
 const classRoute = require("./routes/classesRoute");
 const authenticationMW = require("./midlewares/authenticationMW");
 const registerRoute = require("./routes/registerRoute");
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || process.env.LOCALPORT;
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/NurseryProject")
+  .connect(process.env.DBURL)
   .then(() => {
     console.log("DB Connected....");
     server.listen(port, () => {
