@@ -12,7 +12,6 @@ exports.teachersInsertValidator = [
   body("email")
     .isEmail()
     .withMessage("You should provide a correct form email"),
-  body("image").isString().withMessage("You should provide a string"),
 ];
 
 exports.teachersUpdateValidator = [
@@ -31,10 +30,6 @@ exports.teachersUpdateValidator = [
     .optional()
     .isEmail()
     .withMessage("You should provide a correct form email"),
-  body("image")
-    .optional()
-    .isString()
-    .withMessage("You should provide a string"),
 ];
 
 exports.teacherIdValidator = [

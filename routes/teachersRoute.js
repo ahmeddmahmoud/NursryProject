@@ -1,5 +1,6 @@
 const express = require("express");
 const controller = require("./../controller/teachersController");
+const photoController = require("./../controller/photoController");
 const {
   teachersInsertValidator,
   teachersUpdateValidator,
@@ -20,12 +21,14 @@ router
   .get(isAdmin, controller.getAllTeachers)
   .post(
     isAdmin,
+    photoController.upload.single('file'),
     teachersInsertValidator,
     validatonResult,
     controller.insertTeacher
   )
   .patch(
     isAdmin,
+    photoController.upload.single('file'),
     teachersUpdateValidator,
     validatonResult,
     controller.updateTeacher

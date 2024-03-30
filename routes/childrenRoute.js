@@ -1,5 +1,6 @@
 const express = require("express");
 const controller = require("./../controller/childController");
+const photoController = require("./../controller/photoController");
 const { isAdmin } = require("./../midlewares/authenticationMW");
 
 const {
@@ -15,12 +16,14 @@ router
   .get(isAdmin, controller.getAllChildren)
   .post(
     isAdmin,
+    photoController.upload.single('file'),
     childrenInsertValidator,
     validatonResult,
     controller.insertChild
   )
   .patch(
     isAdmin,
+    photoController.upload.single('file'),
     childrenUpdateValidator,
     validatonResult,
     controller.updateChild

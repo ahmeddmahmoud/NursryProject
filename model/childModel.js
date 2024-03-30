@@ -16,6 +16,7 @@ const schema = new mongoose.Schema({
   age: { type: Number, required: true },
   level: { type: String, enum: ["PreKG", "KG1", "KG2"], required: true },
   address: { type: addressSchema, required: true },
+  image: { type: String },
 });
 
 schema.plugin(AutoIncrement, { id: "child_id", inc_field: "_id" });
