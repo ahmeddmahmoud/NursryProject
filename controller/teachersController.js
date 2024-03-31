@@ -1,5 +1,6 @@
 const teacherSchema = require("../model/teacherModel");
 const classSchema = require("../model/classModel");
+const bcryptjs = require("bcryptjs");
 const fs = require("fs");
 
 exports.getAllTeachers = (req, res, next) => {
@@ -62,10 +63,14 @@ exports.insertTeacher = (req, res, next) => {
 exports.updateTeacher = (req, res, next) => {
   if (req.file) {
     req.body.image = `${Date.now()}-${Math.random()}-${req.file.originalname}`;
-    fs.writeFile(`./photos/teacher/${req.body.image}`, req.file.buffer, (err) => {
-      if (err) return next(err);
-      updateTeacherData(req, res, next);
-    });
+    fs.writeFile(
+      `./photos/teacher/${req.body.image}`,
+      req.file.buffer,
+      (err) => {
+        if (err) return next(err);
+        updateTeacherData(req, res, next);
+      }
+    );
   } else {
     updateTeacherData(req, res, next);
   }
@@ -113,18 +118,27 @@ exports.deleteTeacher = (req, res, next) => {
 };
 
 exports.changeTeacherPassword = (req, res, next) => {
-  teacherSchema
-    .updateOne(
-      { _id: req.body._id },
-      {
-        $set: {
-          password: req.body.password,
-        },
-      }
-    )
-    .then((data) => {
-      if (data.matchedCount == 0) next(new Error("Teacher Not Found"));
-      res.status(200).json("Your password was updated successfully!");
+  bcryptjs
+    .genSalt()
+    .then((salt) => {
+      bcryptjs.hash(req.body.password, salt).then((hash) => {
+        req.body.password = hash;
+        teacherSchema
+        .updateOne(
+          { _id: req.body._id },
+          {
+            $set: {
+              password: req.body.password,
+            },
+          }
+        )
+        .then((data) => {
+          if (data.matchedCount == 0) next(new Error("Teacher Not Found"));
+          res.status(200).json("Your password was updated successfully!");
+        })
+        .catch((err) => next(err));
+      });
     })
     .catch((err) => next(err));
+
 };
