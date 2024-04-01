@@ -22,7 +22,7 @@ exports.classInsertValidator = [
     .custom((value) => {
       return childSchema.find({ _id: { $in: value } }).then((data) => {
         if (data.length != value.length)
-          throw new Error("pls cheack the entered IDs");
+          throw new Error("The ID you entered doesn't exist");
       });
     }),
   body("childrenIDS.*").isInt().withMessage("children ID should be integer"),
@@ -38,11 +38,22 @@ exports.classUpdateValidator = [
   body("supervisor")
     .optional()
     .isMongoId()
-    .withMessage("supervisor ID must be a mongoId"),
+    .withMessage("supervisor ID must be a mongoId")
+    .custom((value) => {
+      return teacherSchema.findOne({ _id: value }).then((object) => {
+        if (!object) throw new Error("this supervisor doesn't exist");
+      });
+    }),
   body("childrenIDS")
     .optional()
     .isArray()
-    .withMessage("children should be an array"),
+    .withMessage("children should be an array")
+    .custom((value) => {
+      return childSchema.find({ _id: { $in: value } }).then((data) => {
+        if (data.length != value.length)
+          throw new Error("The ID you entered doesn't exist");
+      });
+    }),
   body("childrenIDS.*")
     .optional()
     .isInt()
