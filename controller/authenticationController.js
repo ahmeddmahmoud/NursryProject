@@ -24,7 +24,7 @@ exports.checkTeacher = (req, res, next) => {
                     role: "admin",
                   },
                   process.env.SECRETKEY,
-                  { expiresIn: "1hr" }
+                  { expiresIn: "24hr" }
                 );
                 res.json({ data: "Authenticated", token });
               })
@@ -42,7 +42,7 @@ exports.checkTeacher = (req, res, next) => {
                 role: "teacher",
               },
               process.env.SECRETKEY,
-              { expiresIn: "1hr" }
+              { expiresIn: "24hr" }
             );
             res.json({ data: "Authenticated", token });
           })
