@@ -6,6 +6,7 @@ const {
   teachersUpdateValidator,
   teacherIdValidator,
   teachersChangePasswordValidator,
+  deleteSupervisorValidator,
 } = require("./../midlewares/validation/teachersValidation");
 const validatonResult = require("./../midlewares/validation/validatorResult");
 const {
@@ -21,14 +22,14 @@ router
   .get(isAdmin, controller.getAllTeachers)
   .post(
     isAdmin,
-    photoController.upload.single('file'),
+    photoController.upload.single("file"),
     teachersInsertValidator,
     validatonResult,
     controller.insertTeacher
   )
   .patch(
     isAdmin,
-    photoController.upload.single('file'),
+    photoController.upload.single("file"),
     teachersUpdateValidator,
     validatonResult,
     controller.updateTeacher
@@ -40,6 +41,7 @@ router
   .delete(
     isAdmin,
     teacherIdValidator,
+    deleteSupervisorValidator,
     validatonResult,
     controller.deleteTeacher
   );

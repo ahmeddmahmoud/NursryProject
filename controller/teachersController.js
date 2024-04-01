@@ -60,7 +60,11 @@ exports.insertTeacher = (req, res, next) => {
   }
 };
 
-exports.updateTeacher = (req, res, next) => {
+exports.updateTeacher = (req, res, next ) => {
+  let updateData = { ...req.body };
+  delete updateData._id;
+  delete updateData.password; 
+
   if (req.file) {
     req.body.image = `${Date.now()}-${Math.random()}-${req.file.originalname}`;
     fs.writeFile(
@@ -68,22 +72,22 @@ exports.updateTeacher = (req, res, next) => {
       req.file.buffer,
       (err) => {
         if (err) return next(err);
-        updateTeacherData(req, res, next);
+        updateTeacherData(req, res, next, updateData);
       }
     );
   } else {
-    updateTeacherData(req, res, next);
+    updateTeacherData(req, res, next, updateData);
   }
 };
 
-function updateTeacherData(req, res, next) {
+function updateTeacherData(req, res, next, updateData) {
   teacherSchema
     .updateOne(
       {
         _id: req.body._id,
       },
       {
-        $set: req.body,
+        $set: updateData,
       }
     )
     .then((data) => {
@@ -124,21 +128,20 @@ exports.changeTeacherPassword = (req, res, next) => {
       bcryptjs.hash(req.body.password, salt).then((hash) => {
         req.body.password = hash;
         teacherSchema
-        .updateOne(
-          { _id: req.body._id },
-          {
-            $set: {
-              password: req.body.password,
-            },
-          }
-        )
-        .then((data) => {
-          if (data.matchedCount == 0) next(new Error("Teacher Not Found"));
-          res.status(200).json("Your password was updated successfully!");
-        })
-        .catch((err) => next(err));
+          .updateOne(
+            { _id: req.body._id },
+            {
+              $set: {
+                password: req.body.password,
+              },
+            }
+          )
+          .then((data) => {
+            if (data.matchedCount == 0) next(new Error("Teacher Not Found"));
+            res.status(200).json("Your password was updated successfully!");
+          })
+          .catch((err) => next(err));
       });
     })
     .catch((err) => next(err));
-
 };

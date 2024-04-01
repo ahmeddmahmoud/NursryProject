@@ -1,4 +1,6 @@
 const { body, param, query } = require("express-validator");
+const teacherSchema = require("../../model/teacherModel");
+const childSchema = require("../../model/childModel");
 
 exports.classInsertValidator = [
   body("name")
@@ -6,8 +8,23 @@ exports.classInsertValidator = [
     .withMessage("class name should be string")
     .isLength({ min: 5 })
     .withMessage(" class name lenght>5"),
-  body("supervisor").isMongoId().withMessage("supervisor ID must be a mongoId"),
-  body("childrenIDS").isArray().withMessage("children IDs should be an array"),
+  body("supervisor")
+    .isMongoId()
+    .withMessage("supervisor ID must be a mongoId")
+    .custom((value) => {
+      return teacherSchema.findOne({ _id: value }).then((object) => {
+        if (!object) throw new Error("this supervisor doesn't exist");
+      });
+    }),
+  body("childrenIDS")
+    .isArray()
+    .withMessage("children IDs should be an array")
+    .custom((value) => {
+      return childSchema.find({ _id: { $in: value } }).then((data) => {
+        if (data.length != value.length)
+          throw new Error("pls cheack the entered IDs");
+      });
+    }),
   body("childrenIDS.*").isInt().withMessage("children ID should be integer"),
 ];
 
