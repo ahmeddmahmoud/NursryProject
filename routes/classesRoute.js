@@ -6,12 +6,12 @@ const {
   classIdValidator,
 } = require("./../midlewares/validation/classValidation");
 const validatonResult = require("./../midlewares/validation/validatorResult");
-const { isAdmin } = require("./../midlewares/authenticationMW");
+const { isAdmin,isTeacherOrAdmin } = require("./../midlewares/authenticationMW");
 const router = express.Router();
 
 router
   .route("/class")
-  .get(isAdmin, controller.getAllClasses)
+  .get(isTeacherOrAdmin, controller.getAllClasses)
   .post(isAdmin, classInsertValidator, validatonResult, controller.insertClass)
   .patch(
     isAdmin,
@@ -22,12 +22,12 @@ router
 
 router
   .route("/class/:id")
-  .get(isAdmin, controller.getClassById)
+  .get(isTeacherOrAdmin, controller.getClassById)
   .delete(isAdmin, controller.deleteClass);
 
 router
   .route("/class/child/:id")
-  .get(isAdmin, classIdValidator, validatonResult, controller.getClassChildren);
+  .get(isTeacherOrAdmin, classIdValidator, validatonResult, controller.getClassChildren);
 
 router
   .route("/class/teacher/:id")

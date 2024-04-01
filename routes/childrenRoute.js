@@ -1,7 +1,7 @@
 const express = require("express");
 const controller = require("./../controller/childController");
 const photoController = require("./../controller/photoController");
-const { isAdmin } = require("./../midlewares/authenticationMW");
+const { isAdmin, isTeacherOrAdmin } = require("./../midlewares/authenticationMW");
 
 const {
   childrenInsertValidator,
@@ -13,7 +13,7 @@ const router = express.Router();
 
 router
   .route("/child")
-  .get(isAdmin, controller.getAllChildren)
+  .get(isTeacherOrAdmin, controller.getAllChildren)
   .post(
     isAdmin,
     photoController.upload.single('file'),
@@ -31,7 +31,7 @@ router
 
 router
   .route("/child/:id")
-  .get(isAdmin, childrenIdValidator, validatonResult, controller.getChildById)
+  .get(isTeacherOrAdmin, childrenIdValidator, validatonResult, controller.getChildById)
   .delete(
     isAdmin,
     childrenIdValidator,
