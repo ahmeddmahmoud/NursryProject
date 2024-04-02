@@ -65,9 +65,9 @@ server.use(
   swaggerUiExpress.serve,
   swaggerUiExpress.setup(swagerSpec)
 );
-// server.use(registerRoute);
-// server.use(loginRoute);
-// server.use(authenticationMW);
+server.use(registerRoute);
+server.use(loginRoute);
+server.use(authenticationMW);
 server.use(teachersRoute);
 server.use(childrenRoute);
 server.use(classRoute);
